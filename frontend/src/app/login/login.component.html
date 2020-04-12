@@ -11,7 +11,7 @@
         <!-- E-mail -->
         <label class="control-label" for="email">E-mail</label>
         <div class="controls">
-          <input type="text" id="email" name="email" placeholder="Email" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+          <input type="text" id="email" formControlName="email" placeholder="Email" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
           
           <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
             <div *ngIf="f.email.errors.required">Email is required</div>
@@ -24,7 +24,7 @@
         <!-- Password-->
         <label class="control-label" for="password">Password</label>
         <div class="controls">
-          <input type="password" id="password" name="password" placeholder="Password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+          <input type="password" id="password" formControlName="password" placeholder="Password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
           <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
             <div *ngIf="f.password.errors.required">Password is required</div>
          </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-registration',
@@ -8,7 +9,7 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 })
 export class RegistrationComponent implements OnInit {
   public registrationForm : FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private userService: UserService) { }
   submitted = false;
   ngOnInit() {
     this.createForm();
@@ -37,7 +38,11 @@ export class RegistrationComponent implements OnInit {
       return;
     }
 
-    
+    this.userService.addUser(this.registrationForm.value).subscribe((res)=>{
+      alert("Registration successful");
+    },(error)=>{
+      console.log(error);
+    });
     console.log(this.registrationForm.value);
   }
 
