@@ -1,0 +1,8 @@
+node_modules/
+frontend/CHANGELOG.md
+.env
+# frontend/dist/
+backend/temp/
+frontend/package-lock.json
+backend/logs/cron.
+frontend/package-lock.json
