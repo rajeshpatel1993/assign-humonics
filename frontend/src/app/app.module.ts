@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { AppRoutingModule } from './app-routing.module';
 import {  ReactiveFormsModule } from '@angular/forms';
+import { FpasswordComponent } from './fpassword/fpassword.component';
 
 
 
@@ -16,7 +17,8 @@ import {  ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    FpasswordComponent
   ],
   imports: [
     BrowserModule,

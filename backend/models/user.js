@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema ({
     gender: {type: Number},
     phone: {type: String, required: true, unique: true},
     accountNo: {type: String, required: true, unique: true},
+    otp:{type: String},
     createdDate: {
         type: Date,
         default: Date.now

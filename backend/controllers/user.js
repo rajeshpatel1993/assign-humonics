@@ -78,6 +78,111 @@ router.post("/acctno",async(req,res)=>{
 });
 
 
+
+router.get("/getBallances/:accountno", async(req,res) =>{
+  try {
+      
+    let accountno = req.params.accountno;
+
+    let emaildata = await User.findOne({"accountNo":accountno});
+    let email = emaildata.email;
+
+      let aggData = await Account.aggregate([
+        {$match: {"accountNo": accountno}},
+        {
+          $group:
+            {
+             _id: "$transaction_type",
+              totalAmount: { $sum:'$amount' } 
+            }
+        },
+  
+      ]);
+  
+   
+     let totalCredit = aggData[1].totalAmount;
+     let totalDebit = aggData[0].totalAmount;
+     let remainingBalance = totalCredit - totalDebit;
+     let tmpObj = {"balance":remainingBalance};
+      res.status(200).send(tmpObj);
+
+
+    
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+
+router.post("/changePasswordOtp", async(req,res) =>{
+  try {
+      
+    let {otp, password} = req.body;
+    let grandom = Math.floor(Math.random()*90000) + 10000;
+
+    const filter = { otp: otp };
+    let generatedPassword = await bcrypt.hash(password, parseInt(salt_round));
+
+    const update = { password: generatedPassword };
+    let updatedOtp = await User.findOneAndUpdate(filter, update);
+
+    res.status(200).json({"status":"success","msg":"Password changed"});
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.post("/generateOtp", async(req,res) =>{
+  try {
+      
+    let {email} = req.body;
+    let grandom = Math.floor(Math.random()*90000) + 10000;
+
+    const filter = { email: email };
+    const update = { otp: grandom };
+    let updatedOtp = await User.findOneAndUpdate(filter, update);
+
+    const mailOptions = {
+      from: "rajesh@gmail.com", // sender address
+      to: email, // list of receivers
+      subject: 'Email Otp', // Subject line
+      html:`Otp for change Password: : - ${grandom} `// plain text body
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+        if(err)
+          console.log(err)
+        else
+          console.log(info);
+    });
+
+
+    res.status(200).json({"status":"success","msg":"Otp generated"});
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/getPassbook/:accountno", async(req,res) =>{
+  try {
+      
+    let accountno = req.params.accountno;
+      let aggData = await Account.aggregate([
+        {$match: {"accountNo": accountno}},
+  
+      ]);
+      res.status(200).send(aggData);
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 router.post("/maketransaction", async(req,res) =>{
   try {
       
@@ -85,29 +190,77 @@ router.post("/maketransaction", async(req,res) =>{
 
     let emaildata = await User.findOne({"accountNo":accountno});
     let email = emaildata.email;
+    let totalDebit;
+    let totalCredit;
+    if(transtype == "debit"){
+      let aggData = await Account.aggregate([
+        // {$match: {"transaction_type": "credit"}},
+        {
+          $group:
+            {
+             _id: "$transaction_type",
+              totalAmount: { $sum:'$amount' } 
+            }
+        },
+  
+      ]);
+  
+      // console.log(aggData);
+      totalCredit = aggData[1].totalAmount;
+      totalDebit = aggData[0].totalAmount;
+
+   
+    }
+
+    // console.log(totalCredit);
+    // console.log(totalDebit);
+    let latDebitAmount = totalDebit + parseInt(amount);
+    // console.log(latDebitAmount);
+    if( (transtype == "debit") && (totalCredit < latDebitAmount)){
+      res.status(200).send({"status":"lowbalance"});
+      process.exit();
+    }else{
+
+      let savedata = {transaction_type:transtype,amount : amount,accountNo: accountno};
+      const account_instance = new Account(savedata);
+  
+      let sData = await account_instance.save();
+  
+      const mailOptions = {
+        from: "rajesh@gmail.com", // sender address
+        to: email, // list of receivers
+        subject: 'New Transaction', // Subject line
+        html:`New transaction: \n Transaction type: - ${transtype} \n Transaction Amount:- ${amount}`// plain text body
+      };
+  
+      transporter.sendMail(mailOptions, function (err, info) {
+          if(err)
+            console.log(err)
+          else
+            console.log(info);
+      });
+      let tmpObj = {};
+      if(sData){
+        
+        tmpObj["status"] = "success";
+        
+      }else{
+        tmpObj["status"] = "fail";
+      }
+  
+      res.status(200).send(tmpObj);
+  
+
+    }
 
 
-    let savedata = {transaction_type:transtype,amount : amount,accountNo: accountno};
-    const account_instance = new Account(savedata);
-
-    let sData = await account_instance.save();
-
-    const mailOptions = {
-      from: "rajesh@gmail.com", // sender address
-      to: email, // list of receivers
-      subject: 'New Transaction', // Subject line
-      html:`New transaction: \n Transaction type: - ${transtype} \n Transaction Amount:- ${amount}`// plain text body
-    };
-
-  transporter.sendMail(mailOptions, function (err, info) {
-      if(err)
-        console.log(err)
-      else
-        console.log(info);
-  });
+    // let aggD = aggData[0].
+    // console.log(aggData);
+    
 
 
-    res.status(200).send(sData);
+
+    
   } catch (error) {
     console.log(error);
   }
