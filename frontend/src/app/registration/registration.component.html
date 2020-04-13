@@ -1,5 +1,5 @@
 <div class="registrationform">
-
+<div class="container">
   <form class="form-horizontal"  [formGroup]="registrationForm" (ngSubmit)="onSubmit()" >
     <fieldset>
       <div id="legend">
@@ -50,8 +50,8 @@
         <!-- Password-->
         <label class="control-label" for="gender">Gender</label>
         <div class="controls">
-          <input type="radio" name="gender" value="1" formControlName="gender"/> <label>Male</label>
-          <input type="radio" name="gender" value="2" formControlName="gender"/> <label>Female</label>
+          <label> <input type="radio" name="gender" value="1" formControlName="gender"/> Male</label>
+           <label><input type="radio" name="gender" value="2" formControlName="gender"/> Female</label>
 
           <!-- <p class="help-block">Password should be at least 4 characters</p> -->
         </div>
@@ -87,15 +87,20 @@
    
       <div class="control-group">
         <!-- Button -->
-        <div class="controls">
-          <button class="btn btn-success" type="submit">Register</button>
+        <div class="row no-gutters">
+          <div class="col-5 text-left">
+            <a routerLink="/login">Login</a>
+          </div>
+          <div class="col-7">
+            <div class="controls text-right">
+              <button class="btn btn-success" type="submit">Register</button>
+            </div>
+          </div>
         </div>
-
-        <a routerLink="/login">Login</a>
-
-
       </div>
     </fieldset>
   </form>
+</div>
+  
 
 </div>

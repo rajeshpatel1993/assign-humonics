@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+.loginform{
+    width:100%;
+    float: left;
+    min-height: 100vh;
+}
+.loginform .loginform_wrraper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.loginform .loginform_wrraper form{
+    background-color: #dadada;
+    padding: 15px;
+    width: 400px;
+    border-radius: 5px;
+}
+.loginform .loginform_wrraper form label{
+    display: block;
+    text-align: left;
+}

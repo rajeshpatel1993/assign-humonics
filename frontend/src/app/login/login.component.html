@@ -1,5 +1,6 @@
+<div class="container">
 <div class="loginform">
-
+<div class="loginform_wrraper">
   <form class="form-horizontal" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <fieldset>
       <div id="legend">
@@ -36,16 +37,24 @@
    
       <div class="control-group">
         <!-- Button -->
-        <div class="controls">
-          <button class="btn btn-success" type="submit">Login</button>
-        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6 text-left">
+            <a routerLink="/registration">Register</a>
+          </div>
+ 
+          <div class="col-12 col-sm-6">
+            <div class="controls text-right">
+              <button class="btn btn-success w-50" type="submit">Login</button>
+              <p><a routerLink="/fpassword">Forget Password</a></p>
+            </div>
+          </div> 
+          </div>       
       </div>
 
-      <a routerLink="/registration">Register</a> | 
-
-      <a routerLink="/fpassword">Forget Password</a>
+      
 
     </fieldset>
   </form>
-
+</div>
+</div>
 </div>
