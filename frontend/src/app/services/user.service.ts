@@ -18,4 +18,12 @@ export class UserService {
   login(userdata){
     return this.http.post(this.baseUrl+"/user/login",userdata);
   }
+
+  loadAcctNo(emaildata){
+    return this.http.post(this.baseUrl+"/user/acctno",emaildata);
+  }
+
+  makeTransaction(transactionData){
+    return this.http.post(this.baseUrl+"/user/maketransaction",transactionData);
+  }
 }

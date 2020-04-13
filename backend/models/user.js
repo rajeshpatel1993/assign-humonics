@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema ({
     city: {type: String, required: true},
     gender: {type: Number},
     phone: {type: String, required: true, unique: true},
-    accountNo: {type: Number, required: true, unique: true},
+    accountNo: {type: String, required: true, unique: true},
     createdDate: {
         type: Date,
         default: Date.now

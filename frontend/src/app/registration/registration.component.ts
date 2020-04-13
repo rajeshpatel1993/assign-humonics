@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -9,7 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class RegistrationComponent implements OnInit {
   public registrationForm : FormGroup;
-  constructor(private fb: FormBuilder, private userService: UserService) { }
+  constructor(private fb: FormBuilder, private userService: UserService, private router : Router) { }
   submitted = false;
   ngOnInit() {
     this.createForm();
@@ -40,10 +41,12 @@ export class RegistrationComponent implements OnInit {
 
     this.userService.addUser(this.registrationForm.value).subscribe((res)=>{
       alert("Registration successful");
+      this.router.navigateByUrl("/login");
     },(error)=>{
-      console.log(error);
+      alert(JSON.stringify(error));
+      // console.log(error);
     });
-    console.log(this.registrationForm.value);
+    // console.log(this.registrationForm.value);
   }
 
 

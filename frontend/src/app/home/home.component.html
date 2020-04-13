@@ -1,3 +1,6 @@
+<div>
+  <button class="btn btn-danger" (click)="logout()">Logout</button>
+</div>
 <div class="loginsignupdiv">
   <button class="btn btn-primary">Deposit</button>
   |
@@ -6,4 +9,70 @@
  <button class="btn btn-primary">Check ballance</button>
  |
  <button class="btn btn-primary">Transactions</button>
+</div>
+
+<div *ngIf="showForms">
+<div class="depositdiv">
+  <form [formGroup]="depositForm" (ngSubmit)="onDeposit()">
+  <div class="form-group">
+      <label for="acct">Account No</label>
+      <input type="text" id="acct" readonly  formControlName="acctNo" class="form-control"/>
+      <div *ngIf="depositSubmitted && f.acctNo.errors" class="invalid-feedback">
+        <div *ngIf="f.acctNo.errors.required">Account no is required</div>
+     </div>
+
+  </div>
+
+  <div class="form-group">
+    <label for="acct">Amount</label>
+    <input type="text"  id="amount"  formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': depositSubmitted && f.amount.errors }"/>
+    <div *ngIf="depositSubmitted && f.amount.errors" class="invalid-feedback">
+      <div *ngIf="f.amount.errors.required">Amount is required</div>
+   </div>
+
+
+  </div>
+
+   
+  <div class="form-group">
+    <!-- Button -->
+    <div class="controls">
+      <button class="btn btn-success" type="submit">Deposit</button>
+    </div>
+  </div>
+
+  </form>
+
+</div>
+
+
+<div class="withdrawdiv">
+  <form [formGroup]="withdrawForm" (ngSubmit)="onWithdraw()">
+    <div class="form-group">
+      <label for="acct">Account No</label>
+      <input type="text" [value]="acctNo" id="acct" readonly  formControlName="acctNo" class="form-control"/>
+      <div *ngIf="depositSubmitted && fa.acctNo.errors" class="invalid-feedback">
+        <div *ngIf="fa.acctNo.errors.required">Account no is required</div>
+     </div>
+
+  </div>
+
+  <div class="form-group">
+    <label for="acct">Amount</label>
+    <input type="text"  id="amount"  formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': depositSubmitted && fa.amount.errors }"/>
+    <div *ngIf="depositSubmitted && fa.amount.errors" class="invalid-feedback">
+      <div *ngIf="fa.amount.errors.required">Amount is required</div>
+   </div>
+  </div>
+   
+  <div class="form-group">
+    <!-- Button -->
+    <div class="controls">
+      <button class="btn btn-success" type="submit">Withdraw</button>
+    </div>
+  </div>
+
+  </form>
+
+</div>
 </div>

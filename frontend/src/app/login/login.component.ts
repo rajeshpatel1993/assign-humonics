@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private userService : UserService) { }
+  constructor(private fb: FormBuilder, private userService : UserService, private router : Router) { }
   public loginForm : FormGroup;
   submitted = false;
   
@@ -39,6 +40,8 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.loginForm.value).subscribe((res)=>{
       if(res["status"] == "success"){
         localStorage.setItem("token",res["token"]);
+        localStorage.setItem("email",res["email"]);
+        this.router.navigateByUrl("/home");
       }else{
         alert("Invalid Credentials");
       }
