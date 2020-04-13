@@ -1,0 +1,13 @@
+.registrationform{
+    width: 100%;
+    
+}.registrationform form{
+    width: 500px;
+    display: block;
+    margin: 0 auto;
+    padding: 30px;
+}
+.registrationform form .form-group label{
+    display: block;
+    text-align: left;
+}
