@@ -1,0 +1,19 @@
+.Home{
+    width: 100%;
+    float: left;
+    padding: 20px 0;
+}
+.Home .loginsignupdiv{
+    width: 100%;
+    float: left;
+}
+.Home .loginsignupdiv .btn{
+    margin-right: 5px;
+}
+.Home .formLabel label{
+    display: block;
+    text-align: left;
+}
+.Home .formLabel .btn{
+    float: right;
+}
