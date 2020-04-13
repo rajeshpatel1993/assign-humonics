@@ -26,4 +26,20 @@ export class UserService {
   makeTransaction(transactionData){
     return this.http.post(this.baseUrl+"/user/maketransaction",transactionData);
   }
+
+  loadBalance(acctno){
+    return this.http.get(this.baseUrl+"/user/getBallances/"+acctno);
+  }
+
+  loadPassbooks(acctno){
+    return this.http.get(this.baseUrl+"/user/getPassbook/"+acctno);
+  }
+
+  generateOtp(emaildata){
+    return this.http.post(this.baseUrl+"/user/generateOtp",emaildata);
+  }
+
+  updatePasswordOtp(userdata){
+    return this.http.post(this.baseUrl+"/user/changePasswordOtp",userdata);
+  }
 }

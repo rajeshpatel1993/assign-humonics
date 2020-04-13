@@ -12,6 +12,15 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router, private userService : UserService, private fb : FormBuilder) { }
   public acctNo:any = "";
+
+  currentBalance : Number ;
+  passBookData: any;
+
+  showDepositForm:boolean= false;
+  showWithdrawForm: boolean = false;
+  showBalanceDiv: boolean = false;
+  showPassbook: boolean = false;
+
   depositSubmitted = false;
   withdrawSubmitted = false;
   depositForm : FormGroup;
@@ -43,7 +52,6 @@ export class HomeComponent implements OnInit {
   }
 
   createForm(acctNo){
-    console.log(acctNo);
     let group = {
       acctNo: [acctNo, Validators.required],
       amount: ['', Validators.required],
@@ -67,13 +75,15 @@ export class HomeComponent implements OnInit {
     let tmpdata = {};
     tmpdata["accountno"] = this.depositForm.value["acctNo"];
     tmpdata["amount"] = this.depositForm.value["amount"];
-    tmpdata["transtype"] = "deposit";
+    tmpdata["transtype"] = "credit";
 
     this.userService.makeTransaction(tmpdata).subscribe((res)=>{
       if(res["status"] == "success"){
-        
+        alert("Credited");
+        this.depositForm.reset();
+
       }else{
-        alert("Invalid Credentials");
+        alert("Invalid Transactions");
       }
     },(error)=>{
       alert(JSON.stringify(error));
@@ -89,11 +99,21 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.userService.login(this.depositForm.value).subscribe((res)=>{
+    let tmpdata = {};
+    tmpdata["accountno"] = this.withdrawForm.value["acctNo"];
+    tmpdata["amount"] = this.withdrawForm.value["amount"];
+    tmpdata["transtype"] = "debit";
+
+
+    this.userService.makeTransaction(tmpdata).subscribe((res)=>{
       if(res["status"] == "success"){
-        
-      }else{
-        alert("Invalid Credentials");
+        this.withdrawForm.reset();
+        alert("Debited");
+      }else if(res["status"] == "lowbalance"){
+        alert("not enough balance");
+      }
+      else{
+        alert("Invalid Transaction");
       }
     },(error)=>{
       alert(JSON.stringify(error));
@@ -101,6 +121,64 @@ export class HomeComponent implements OnInit {
     
     
   }
+
+  loadBalances(acctno){
+    this.userService.loadBalance(acctno).subscribe((d)=>{
+      this.currentBalance = d['balance'];
+
+    },(error)=>{
+      console.log(error);
+    });
+  }
+
+
+  loadPassbooks(acctno){
+    this.userService.loadPassbooks(acctno).subscribe((d)=>{
+      this.passBookData = d;
+
+    },(error)=>{
+      console.log(error);
+    });
+  }
+
+  showDeposit(){
+    this.showDepositForm = true;
+    this.showWithdrawForm = false;
+    this.showBalanceDiv = false;
+    this.showPassbook = false;
+
+  }
+
+  showWithdraw(){
+    this.showDepositForm = false;
+    this.showWithdrawForm = true;
+    this.showBalanceDiv = false;
+    this.showPassbook = false;
+
+  }
+
+
+  showBallances(){
+    this.showDepositForm = false;
+    this.showWithdrawForm = false;
+    this.showBalanceDiv = true;
+    this.showPassbook = false;
+    this.loadBalances(this.acctNo);
+
+  }
+
+  showPassbooks(){
+    this.showDepositForm = false;
+    this.showWithdrawForm = false;
+    this.showBalanceDiv = false;
+    this.showPassbook = true;
+    this.loadPassbooks(this.acctNo);
+
+  }
+
+
+
+
 
 
 }
